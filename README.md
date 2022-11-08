@@ -1,1 +1,1 @@
-Code for my [personal website](colinmcdonald.org)!
+Code for my [personal website](https://colinmcdonald.org)!
