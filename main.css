@@ -1,10 +1,11 @@
 body {
-	width: 100%;
-        max-width: 1000px;
-	margin: 50px 0;
-	font-family: 'Source Sans Pro', sans-serif;
-	font-size: 18px;
-	font-weight: 300;
+    width: 100%;
+    max-width: 1000px;
+    margin: 50px 0;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    background-color:#fffcfa;
 }
 
 h1 { font-weight: 300; font-size: 48px; margin: 0 0 10px 0; }
@@ -27,13 +28,38 @@ div.contact dd { margin-left: 0;}
 div.lastupdated { font-size: 12px; }
 
 .smallbutton {
-  position: relative;
-  -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
-  padding: 0px 5px 0px 5px;
-  border: solid 1px #2980b9;
-  color: #2980b9;
-  font-size: 14px;
-  text-decoration: none;
-  margin: 0px 2px;
+    position: relative;
+    -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
+    padding: 0px 5px 0px 5px;
+    border: solid 1px #2980b9;
+    color: #2980b9;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 0px 2px;
 }
 
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted #2980b9;
+    color: #2980b9;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: max-content;
+    background-color: black;
+    /*border: solid 1px #2980b9;*/
+    /*color: #2980b9;*/
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
