@@ -1,0 +1,38 @@
+{
+  "name": "Colin McDonald personal website demos",
+  "version": "1.0.0",
+  "description": "",
+  "main": " ",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "@bjorn3/browser_wasi_shim": "^0.4.1",
+    "debug": "^4.3.4",
+    "fflate": "^0.7.4",
+    "fs": "^0.0.1-security",
+    "fs-monkey": "^1.0.3",
+    "ms": "^2.1.2",
+    "path-browserify": "^1.0.1",
+    "randombytes": "^2.1.0",
+    "randomfill": "^1.0.4",
+    "safe-buffer": "^5.2.1",
+    "typedarray-to-buffer": "^4.0.0",
+    "wasi-js": "^1.7.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "make",
+    "server": "http-server --cors"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colin-mcd/colin-mcd.github.io.git"
+  },
+  "author": "Colin McDonald",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/colin-mcd/colin-mcd.github.io/issues"
+  },
+  "homepage": "https://github.com/colin-mcd/colin-mcd.github.io/#"
+}

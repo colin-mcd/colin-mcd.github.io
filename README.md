@@ -8,3 +8,9 @@ Email SVG created in Inkscape with the following procedure:
 5. `Path` -> `Object to Path`
 6. Go back to XML Editor, select `<svg:g id="test...` and set aria-label to "redacted"
 7. Save. Done!
+
+
+**TODO:**
+- UntypedLambda
+- Countability
+- SequentCalculus cut-elim implementation

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<style>
+.verticalmid {
+  vertical-align: middle;
+}
+</style>
+</head>
+<body>
+
+<label>
+Definitions
+<br>
+<textarea cols="60" rows="20" id="boxdefs"></textarea>
+<br><br>
+<textarea cols="60" rows="2" id="boxreduce"></textarea>
+<br>
+<button type="button" id="buttonreduce">Reduce</button>
+<textarea cols="52" rows="2" id="outputreduce" disabled class="verticalmid"></textarea>
+<br>
+<br>
+<textarea cols="29" rows="2" id="boxbohma"></textarea>
+<textarea cols="29" rows="2" id="boxbohmb"></textarea>
+<br>
+<button type="button" id="buttonbohm" class="runbutton">Discriminate</button>
+<textarea cols="47" rows="2" id="outputbohm" disabled class="verticalmid"></textarea>
+</label>
+
+<script type="importmap">
+{"imports": {"@bjorn3/browser_wasi_shim": "./node_modules/@bjorn3/browser_wasi_shim/dist/index.js"}}
+</script>
+
+<script type="module" src="client.js"></script>
+<!--<script type="module" src="client.js"></script>-->
+
+</body>
+</html>
