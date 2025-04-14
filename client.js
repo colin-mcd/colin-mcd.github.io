@@ -1,4 +1,4 @@
-import { WASI } from "@bjorn3/browser_wasi_shim";
+import { WASI } from "./node_modules/@bjorn3/browser_wasi_shim/dist/index.js";
 //import { Buffer } from 'buffer';
 
 //const canvas = document.getElementById('GameCanvas');
