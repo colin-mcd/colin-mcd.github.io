@@ -82,12 +82,13 @@ let boxdefs = document.getElementById('boxdefs');
 let boxreduce = document.getElementById('boxreduce');
 let boxbohma = document.getElementById('boxbohma');
 let boxbohmb = document.getElementById('boxbohmb');
-let outputreduce = document.getElementById('outputreduce');
+// let outputreduce = document.getElementById('outputreduce');
 let outputbohm = document.getElementById('outputbohm');
 let radiostrict = document.getElementById('evalorderapp');
 let radiolazy = document.getElementById('evalordernorm');
 let radiohnf = document.getElementById('evalhnf');
 let radionf = document.getElementById('evalnf');
+let checkstep = document.getElementById('evalstep');
 
 const wasi = new WASI([], [], []);
 let __exports = {};
@@ -138,23 +139,46 @@ async function performGC() {
     await refreshInstance();
 }
 
+function getEvalOrder() {
+    return document.querySelector('input[name="evalorder"]:checked').value;
+}
+
+function getEvalTo() {
+    return document.querySelector('input[name="evalto"]:checked').value;
+}
+
+function setHTMLof(elmt, lam_md_str) {
+
+}
+
 buttonreduce.onclick = async () => {
-    const evalorder = radiostrict.checked ? "strict" : "lazy";
-    const evalto = radiohnf.checked ? "hnf" : "nf";
-    const in_str = evalorder + '§' + evalto + '§' + boxdefs.value + '§' + boxreduce.value;
-    const [in_ptr, in_len] = encodeString(in_str);
-    const out_ptr = inst.exports.myreduce(in_ptr, in_len);
-    outputreduce.value = decodeString(out_ptr);
-    freeString(in_ptr);
-    freeString(out_ptr);
-    performGC();
+    if (boxreduce.value.length == 0) {
+        outputreduce.innerHTML = "";
+    } else {
+        const step = checkstep.checked;
+        const step_str = step ? 'true' : 'false';
+        const in_str = step_str + '§' + getEvalOrder() + '§' + getEvalTo() + '§' + boxdefs.value + '§' + boxreduce.value;
+        const [in_ptr, in_len] = encodeString(in_str);
+        const out_ptr = inst.exports.myreduce(in_ptr, in_len);
+        const out_str = decodeString(out_ptr);
+        const hl_color = "#00AAAA"
+        const out_str_fmt = out_str
+              .replaceAll("\x1b[4m", "<span style=\"color: " + hl_color + "\">")
+              .replaceAll("\x1b[0m", "</span>")
+              .replaceAll("\n", "<br>");
+        outputreduce.innerHTML = "<code>" + out_str_fmt + "</code>";
+        freeString(in_ptr);
+        freeString(out_ptr);
+        performGC();
+    }
 };
 
 buttonbohm.onclick = async () => {
     const in_str = boxdefs.value + '§' + boxbohma.value + '§' + boxbohmb.value;
     const [in_ptr, in_len] = encodeString(in_str);
     const out_ptr = inst.exports.bohmout(in_ptr, in_len);
-    outputbohm.value = decodeString(out_ptr);
+    //outputbohm.value = decodeString(out_ptr);
+    outputbohm.innerHTML = "<code>" + decodeString(out_ptr) + "</code>";
     freeString(in_ptr);
     freeString(out_ptr);
     performGC();

@@ -77,14 +77,24 @@ parseReductionStrategy "strict" "nf" = Right UntypedLambda.ApplOrder
 parseReductionStrategy "lazy" "nf" = Right UntypedLambda.NormOrder
 parseReductionStrategy order to = Left ("expected combination of \"strict|lazy\" and \"hnf|nf\" but got \"" ++ order ++ "\" and \"" ++ to ++ "\"")
 
+parseBool :: String -> Either String Bool
+parseBool "true" = Right True
+parseBool "false" = Right False
+parseBool b = Left ("expected \"True|False\" but got \"" ++ b ++ "\"")
+
 myreduce' :: String -> String
 myreduce' s =
-  either ((++) "Error: ") show $
-  splitInput s 4 >>= \[evalorder, evalto, pmStr, tmStr] ->
+  either ((++) "Error: ") id $
+  splitInput s 5 >>= \[evalstep, evalorder, evalto, pmStr, tmStr] ->
+  parseBool evalstep >>= \step ->
   parseReductionStrategy evalorder evalto >>= \rs ->
   parseProgram pmStr >>= \pm ->
   UntypedLambda.parseTerm tmStr >>= \tm ->
-  return (UntypedLambda.reduce (UntypedLambda.progDefs pm) rs tm)
+  let mp = UntypedLambda.progDefs pm in
+  if step then
+    return (unlines (UntypedLambda.stepsDiff tm (UntypedLambda.steps mp rs tm)))
+  else
+    return (show (UntypedLambda.reduce mp rs tm))
 
 mymarshal' :: String -> String
 mymarshal' s = s ++ " hi"
