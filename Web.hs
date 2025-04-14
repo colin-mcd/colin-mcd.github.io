@@ -70,13 +70,21 @@ parseProgram s =
   UntypedLambda.lexStr s >>=
   UntypedLambda.parseOut UntypedLambda.parseProgram
 
+parseReductionStrategy :: String -> String -> Either String UntypedLambda.ReductionStrategy
+parseReductionStrategy "strict" "hnf" = Right UntypedLambda.CallByValue
+parseReductionStrategy "lazy" "hnf" = Right UntypedLambda.CallByName
+parseReductionStrategy "strict" "nf" = Right UntypedLambda.ApplOrder
+parseReductionStrategy "lazy" "nf" = Right UntypedLambda.NormOrder
+parseReductionStrategy order to = Left ("expected combination of \"strict|lazy\" and \"hnf|nf\" but got \"" ++ order ++ "\" and \"" ++ to ++ "\"")
+
 myreduce' :: String -> String
 myreduce' s =
-  either id show $
-  splitInput s 2 >>= \[pmStr, tmStr] ->
+  either ((++) "Error: ") show $
+  splitInput s 4 >>= \[evalorder, evalto, pmStr, tmStr] ->
+  parseReductionStrategy evalorder evalto >>= \rs ->
   parseProgram pmStr >>= \pm ->
   UntypedLambda.parseTerm tmStr >>= \tm ->
-  return (UntypedLambda.reduce (UntypedLambda.progDefs pm) UntypedLambda.NormOrder tm)
+  return (UntypedLambda.reduce (UntypedLambda.progDefs pm) rs tm)
 
 mymarshal' :: String -> String
 mymarshal' s = s ++ " hi"

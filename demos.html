@@ -6,6 +6,9 @@
 .verticalmid {
   vertical-align: middle;
 }
+.monoinput {
+  font-family: monospace;
+}
 </style>
 </head>
 <body>
@@ -95,18 +98,33 @@ cycle xs = append xs (cycle xs)
 take n xs = n (\rec xs. cons (head xs) (rec (tail xs))) (\xs. nil) xs
 drop n xs = n tail xs
 </textarea>
-<br><br>
-<textarea cols="60" rows="2" id="boxreduce">add 2 2</textarea>
-<br>
-<button type="button" id="buttonreduce">Reduce</button>
-<textarea cols="52" rows="2" id="outputreduce" disabled class="verticalmid"></textarea>
 <br>
 <br>
-<textarea cols="29" rows="2" id="boxbohma">odd</textarea>
-<textarea cols="29" rows="2" id="boxbohmb">even</textarea>
+<div>
+  Evaluation order:
+  <input type="radio" id="evalorderapp" name="evalorder" value="strict" checked />
+  <label for="evalorderapp">strict</label>
+  <input type="radio" id="evalordernorm" name="evalorder" value="lazy" />
+  <label for="evalordernorm">lazy</label>
+  <br>
+  Reduce to:
+  <input type="radio" id="evalnf" name="evalwhat" value="nf" checked />
+  <label for="evalnf">normal form</label>
+  <input type="radio" id="evalhnf" name="evalwhat" value="hnf" />
+  <label for="evalhnf">head normal form</label>  
+  <br>
+  <input type="text" class="monoinput" size="46" id="boxreduce" value="add 2 2"></input>
+  <button type="button" id="buttonreduce">Reduce</button>
+  <br>
+  <input type="text" class="monoinput" size="46" id="outputreduce" disabled></input>
+</div>
 <br>
+<br>
+<input type="text" class="monoinput" size="22" id="boxbohma"></input>
+<input type="text" class="monoinput" size="22" id="boxbohmb"></input>
 <button type="button" id="buttonbohm" class="runbutton">Discriminate</button>
-<textarea cols="47" rows="2" id="outputbohm" disabled class="verticalmid"></textarea>
+<br>
+<input type="text" class="monoinput" size="46" id="outputbohm" disabled></input>
 </label>
 
 <script type="importmap">
@@ -115,6 +133,8 @@ drop n xs = n tail xs
 
 <script type="module" src="client.js"></script>
 <!--<script type="module" src="client.js"></script>-->
+
+
 
 </body>
 </html>

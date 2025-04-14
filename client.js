@@ -84,6 +84,10 @@ let boxbohma = document.getElementById('boxbohma');
 let boxbohmb = document.getElementById('boxbohmb');
 let outputreduce = document.getElementById('outputreduce');
 let outputbohm = document.getElementById('outputbohm');
+let radiostrict = document.getElementById('evalorderapp');
+let radiolazy = document.getElementById('evalordernorm');
+let radiohnf = document.getElementById('evalhnf');
+let radionf = document.getElementById('evalnf');
 
 const wasi = new WASI([], [], []);
 let __exports = {};
@@ -135,7 +139,10 @@ async function performGC() {
 }
 
 buttonreduce.onclick = async () => {
-    const [in_ptr, in_len] = encodeString(boxdefs.value + '§' + boxreduce.value);
+    const evalorder = radiostrict.checked ? "strict" : "lazy";
+    const evalto = radiohnf.checked ? "hnf" : "nf";
+    const in_str = evalorder + '§' + evalto + '§' + boxdefs.value + '§' + boxreduce.value;
+    const [in_ptr, in_len] = encodeString(in_str);
     const out_ptr = inst.exports.myreduce(in_ptr, in_len);
     outputreduce.value = decodeString(out_ptr);
     freeString(in_ptr);
