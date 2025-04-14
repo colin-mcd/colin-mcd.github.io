@@ -13,7 +13,7 @@
 </head>
 <body>
 
-<label>
+<!-- <label> -->
 Definitions
 <br>
 <textarea cols="60" rows="20" id="boxdefs">
@@ -123,15 +123,24 @@ drop n xs = n tail xs
 </div>
 <br>
 <br>
-<div>
+<div style="width: 32em; word-wrap: break-word">
+  Böhm's Theorem: any two normal forms are either <i>η</i>-convertible or separable [<a href="#citehuet">1</a>].
+  <br>
+  This theorem is proven constructively!
+  Enter any two terms with finite normal forms below,
+  and this computes a discriminator function which returns
+  true (<code>λt. λf. t</code>) when given the first as argument,
+  and false (<code>λt. λf. f</code>) for the second.
+  
+  <br>
   <input type="text" class="monoinput" size="22" id="boxbohma" value="odd"></input>
   <input type="text" class="monoinput" size="22" id="boxbohmb" value="even"></input>
-  <button type="button" id="buttonbohm" class="runbutton">Discriminate</button>
+  <button type="button" id="buttonbohm" class="runbutton">Separate</button>
   <br>
   <div id='outputbohm'></div>
   <!-- <input type="text" class="monoinput" size="46" id="outputbohm" disabled></input> -->
 </div>
-</label>
+<!-- </label> -->
 
 <script type="importmap">
 {"imports": {"@bjorn3/browser_wasi_shim": "./node_modules/@bjorn3/browser_wasi_shim/dist/index.js"}}
@@ -140,7 +149,13 @@ drop n xs = n tail xs
 <script type="module" src="client.js"></script>
 <!--<script type="module" src="client.js"></script>-->
 
+<br>
+<br>
 
-
+<div>
+References
+<br>
+<div id="citehuet">[1] <a href="https://inria.hal.science/inria-00074664/document">Huet, Gérard. An Analysis of Böhm’s Theorem. 2008.</a></div>
+</div>
 </body>
 </html>
