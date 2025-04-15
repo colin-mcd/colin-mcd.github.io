@@ -1,8 +1,4 @@
-import { WASI } from "./node_modules/@bjorn3/browser_wasi_shim/dist/index.js";
-//import { Buffer } from 'buffer';
-
-//const canvas = document.getElementById('GameCanvas');
-//const context = canvas.getContext('2d');
+import { WASI } from "@bjorn3/browser_wasi_shim";
 
 // TODO: figure out how to make 'memory' variable const
 // Right now this variable is initialised when initialising WASM module
@@ -51,7 +47,7 @@ let boxdefs = document.getElementById('boxdefs');
 let boxreduce = document.getElementById('boxreduce');
 let boxbohma = document.getElementById('boxbohma');
 let boxbohmb = document.getElementById('boxbohmb');
-// let outputreduce = document.getElementById('outputreduce');
+let outputreduce = document.getElementById('outputreduce');
 let outputbohm = document.getElementById('outputbohm');
 let radiostrict = document.getElementById('evalorderapp');
 let radiolazy = document.getElementById('evalordernorm');
@@ -62,19 +58,19 @@ let checkstep = document.getElementById('evalstep');
 const wasi = new WASI([], [], []);
 let __exports = {};
 const wasiImportObj = { 
-    wasi_snapshot_preview1: wasi.wasiImport,
-    ghc_wasm_jsffi: (await import('./Web.js')).default(__exports),
-    env: externalFunctions
+  wasi_snapshot_preview1: wasi.wasiImport,
+  ghc_wasm_jsffi: (await import('./Web.js')).default(__exports),
+  env: externalFunctions
 };
 const wasm = await WebAssembly.compileStreaming(fetch('./Web.wasm'));
 let inst = null;
 
 async function refreshInstance() {
-    inst = await WebAssembly.instantiate(wasm, wasiImportObj);
-    wasi.initialize(inst);
-    inst.exports.hs_init(0, 0);
-    Object.assign(__exports, inst.exports);
-    memory = inst.exports.memory;
+  inst = await WebAssembly.instantiate(wasm, wasiImportObj);
+  wasi.initialize(inst);
+  inst.exports.hs_init(0, 0);
+  Object.assign(__exports, inst.exports);
+  memory = inst.exports.memory;
 }
 
 
@@ -85,70 +81,69 @@ const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 function encodeString(inputData) {
-    // TODO: is there a more efficient way to compute the byte length?
-    const inputLen = encoder.encode(inputData).length;
-    const inputPtr = inst.exports.malloc(inputLen);
-    const inputArr = new Uint8Array(memory.buffer, inputPtr, inputLen);
-    encoder.encodeInto(inputData, inputArr);
-    return [inputPtr, inputLen];
+  // TODO: is there a more efficient way to compute the byte length?
+  const inputLen = encoder.encode(inputData).length;
+  const inputPtr = inst.exports.malloc(inputLen);
+  const inputArr = new Uint8Array(memory.buffer, inputPtr, inputLen);
+  encoder.encodeInto(inputData, inputArr);
+  return [inputPtr, inputLen];
 }
 
 function decodeString(outputPtr) {
-    const outputLen = inst.exports.getCharPtrSize(outputPtr);
-    const outputArr = new Uint8Array(memory.buffer, outputPtr, outputLen);
-    return decoder.decode(outputArr);
+  const outputLen = inst.exports.getCharPtrSize(outputPtr);
+  const outputArr = new Uint8Array(memory.buffer, outputPtr, outputLen);
+  return decoder.decode(outputArr);
 }
 
 function freeString(ptr) {
-    inst.exports.free(ptr);
+  inst.exports.free(ptr);
 }
 
 async function performGC() {
-    inst.exports.hs_perform_gc();
-    await refreshInstance();
+  inst.exports.hs_perform_gc();
+  await refreshInstance();
 }
 
 function getEvalOrder() {
-    return document.querySelector('input[name="evalorder"]:checked').value;
+  return document.querySelector('input[name="evalorder"]:checked').value;
 }
 
 function getEvalTo() {
-    return document.querySelector('input[name="evalto"]:checked').value;
+  return document.querySelector('input[name="evalto"]:checked').value;
 }
 
+const hl_color = "#00AAAA"
 function setHTMLof(elmt, lam_md_str) {
-
+  elmt.innerHTML = lam_md_str
+    .replaceAll("\x1b[4m", "<span style=\"color: " + hl_color + "\">")
+    .replaceAll("\x1b[0m", "</span>")
+    .replaceAll("\n", "<br>");
 }
 
 buttonreduce.onclick = async () => {
-    if (boxreduce.value.length == 0) {
-        outputreduce.innerHTML = "";
-    } else {
-        const step = checkstep.checked;
-        const step_str = step ? 'true' : 'false';
-        const in_str = step_str + '§' + getEvalOrder() + '§' + getEvalTo() + '§' + boxdefs.value + '§' + boxreduce.value;
-        const [in_ptr, in_len] = encodeString(in_str);
-        const out_ptr = inst.exports.myreduce(in_ptr, in_len);
-        const out_str = decodeString(out_ptr);
-        const hl_color = "#00AAAA"
-        const out_str_fmt = out_str
-              .replaceAll("\x1b[4m", "<span style=\"color: " + hl_color + "\">")
-              .replaceAll("\x1b[0m", "</span>")
-              .replaceAll("\n", "<br>");
-        outputreduce.innerHTML = "<code>" + out_str_fmt + "</code>";
-        freeString(in_ptr);
-        freeString(out_ptr);
-        performGC();
-    }
-};
-
-buttonbohm.onclick = async () => {
-    const in_str = boxdefs.value + '§' + boxbohma.value + '§' + boxbohmb.value;
+  if (boxreduce.value.length == 0) {
+    setHTMLof(outputreduce, "");
+  } else {
+    const step = checkstep.checked;
+    const step_str = step ? 'true' : 'false';
+    const in_str = step_str + '§' + getEvalOrder() + '§' + getEvalTo() + '§' + boxdefs.value + '§' + boxreduce.value;
     const [in_ptr, in_len] = encodeString(in_str);
-    const out_ptr = inst.exports.bohmout(in_ptr, in_len);
-    //outputbohm.value = decodeString(out_ptr);
-    outputbohm.innerHTML = "<code>" + decodeString(out_ptr) + "</code>";
+    const out_ptr = inst.exports.myreduce(in_ptr, in_len);
+    const out_str = decodeString(out_ptr);
+    setHTMLof(outputreduce, out_str);
     freeString(in_ptr);
     freeString(out_ptr);
     performGC();
+  }
+};
+
+buttonbohm.onclick = async () => {
+  const in_str = boxdefs.value + '§' + boxbohma.value + '§' + boxbohmb.value;
+  const [in_ptr, in_len] = encodeString(in_str);
+  const out_ptr = inst.exports.bohmout(in_ptr, in_len);
+  const out_str = decodeString(out_ptr);
+  setHTMLof(outputbohm, out_str);
+  freeString(in_ptr);
+  freeString(out_ptr);
+  performGC();
 };
