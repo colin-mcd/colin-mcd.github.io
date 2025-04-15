@@ -24,37 +24,6 @@ const externalFunctions = {
 //     arc : (x, y, radius, startAngle, endAngle, counterclockwise) => {
 //         context.arc(x, y, radius, startAngle, endAngle, counterclockwise);
 //     },
-//     ellipse : (x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise) => {
-//         context.ellipse(x, y, radiusX, radiusY, rotation, startAngle, endAngle, counterclockwise);
-//     },
-//     fill : () => {
-//         context.fill();
-//     },
-//     beginPath : () => {
-//         context.beginPath();
-//     },
-//     closePath : () => {
-//         context.closePath();
-//     },
-//     stroke : () => {
-//         context.stroke();
-//     },
-//     moveTo : (x, y) => {
-//         context.moveTo(x, y);
-//     },
-//     lineTo : (x, y) => {
-//         context.lineTo(x, y);
-//     },
-//     clearCanvas : (colR, colG, colB) => {
-//         context.fillStyle=`rgb(${colR},${colG},${colB})`;
-//         context.fillRect(0, 0, canvas.width, canvas.height);
-//     },
-//     fillStyle : (colR, colG, colB) => {
-//         context.fillStyle=`rgb(${colR},${colG},${colB})`;
-//     },
-//     fillRect : (x, y, width, height) => {
-//         context.fillRect(x, y, width, height);
-//     },
 //     getCanvasWidth : () => {
 //         return canvas.width;
 //     },
@@ -183,37 +152,3 @@ buttonbohm.onclick = async () => {
     freeString(out_ptr);
     performGC();
 };
-
-//memory = inst.exports.memory;
-// const encoder = new TextEncoder();
-// const decoder = new TextDecoder();
-
-// // Just an example of sending and receving
-// // byte arrays to and from a WASI reactor
-// // Followed this example:
-// // https://github.com/willmcpherson2/ghc-wasm-experiment/tree/main
-// const inputData = "Test String!"
-// const inputLen = Buffer.byteLength(inputData);
-// const inputPtr = inst.exports.malloc(inputLen);
-// const inputArr = new Uint8Array(memory.buffer, inputPtr, inputLen);
-// encoder.encodeInto(inputData, inputArr);
-
-// const outputPtr = inst.exports.reverseCharArray(inputPtr, inputLen);
-// const outputArr = new Uint8Array(memory.buffer, outputPtr, inputLen);
-// const output = decoder.decode(outputArr);
-// console.log(`'${inputData}' reversed is '${output}'`)
-// inst.exports.free(inputPtr);
-// inst.exports.free(outputPtr);
-
-// var previousTimeStamp = null;
-// function step(timeStamp) {
-//     if (!previousTimeStamp) {
-//         previousTimeStamp = timeStamp;
-//     }
-//     const deltaTime = (timeStamp-previousTimeStamp)/1000;
-//     inst.exports.runGameStep(mouseX, mouseY, deltaTime);
-//     previousTimeStamp = timeStamp;
-//     window.requestAnimationFrame(step);
-// }
-// window.requestAnimationFrame(step);
-
