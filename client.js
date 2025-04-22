@@ -114,10 +114,11 @@ function getEvalTo() {
 
 const hl_color = "#00AAAA"
 function setHTMLof(elmt, lam_md_str) {
-  elmt.innerHTML = lam_md_str
+  let code = (lam_md_str.includes("\n")) ? ("<code style=\"display:block\">") : "<code>";
+  elmt.innerHTML = code + lam_md_str
     .replaceAll("\x1b[4m", "<span style=\"color: " + hl_color + "\">")
     .replaceAll("\x1b[0m", "</span>")
-    .replaceAll("\n", "<br>");
+    .replaceAll("\n", "<br>") + "</code>";
 }
 
 buttonreduce.onclick = async () => {

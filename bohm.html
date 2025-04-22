@@ -1,22 +1,23 @@
 <!doctype html>
 <html lang="en">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400" rel="stylesheet" type="text/css">
+
+<meta charset="UTF-8">
+<meta name="description" content="Proof and implementation of Böhm's Theorem for λ-term separability">
+<title>Böhm's Theorem and the Böhm-Out Algorithm</title>
+<link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
+<link rel="stylesheet" type="text/css" href="main.css">
+
+</head>
 
 <head>
-<style>
-.monoinput {
-  font-family: monospace;
-}
 
-/*body {
-  background-color: #BBB;
-}*/
-</style>
 </head>
-<body>
-
-Definitions
-<br>
-<textarea cols="60" rows="20" id="boxdefs">
+<body style="max-width: 40em">
+<!-- <div style="width: 40em; word-wrap: break-word; margin-left: auto; margin-right: auto"> -->
+<div>
+<h3>Definitions</h3>
+<textarea rows="20" id="boxdefs" style="resize: none; width: 95%">
 -- Church-encoded datatypes
 
 {- UNIT -}
@@ -30,7 +31,8 @@ true = \t. \f. t
 false = \t. \f. f
 then = unit -- dummy definitions
 else = unit -- ^^^^^
-if b then t else f = b t f -- make 'if' actually take 5 args, including 'then' and 'else'
+-- make 'if' actually take 5 args, including 'then' and 'else':
+if b then t else f = b t f
 and a b = if a then b else false
 or a b = if a then true else b
 not a = if a then false else true
@@ -115,14 +117,14 @@ drop n xs = n tail xs
   <input type="checkbox" id="evalstep" name="evalstep" value="step" />
   <label for="evalstep">show steps</label>
   <br>
-  <input type="text" class="monoinput" size="46" id="boxreduce" value="add 2 2"></input>
+  <input type="text" size="46" id="boxreduce" value="add 2 2"></input>
   <button type="button" id="buttonreduce">Reduce</button>
   <br>
-  <code><div id='outputreduce'></div></code>
+  <div id='outputreduce'></div>
 </div>
 <br>
 <br>
-<div style="width: 32em; word-wrap: break-word">
+
   <h2>Böhm's Theorem</h2>
   Any two normal forms are either <i>η</i>-convertible or separable [<a href="#citehuet">1</a>].
   <br><br>
@@ -136,11 +138,11 @@ drop n xs = n tail xs
   <!-- and false (<code>λt f. f</code>) for the second. -->
   
   <br>
-  <input type="text" class="monoinput" size="22" id="boxbohma" value="odd"></input>
-  <input type="text" class="monoinput" size="22" id="boxbohmb" value="even"></input>
+  <input type="text" size="22" id="boxbohma" value="odd"></input>
+  <input type="text" size="22" id="boxbohmb" value="even"></input>
   <button type="button" id="buttonbohm" class="runbutton">Separate</button>
   <br>
-  <code><div id='outputbohm'></div></code>
+  <div id='outputbohm'></div>
   <br>
   Not only does a <code>Δ</code> exist, but there is a constructive algorithm
   called the Böhm-out technique that gives us a concrete <code>Δ</code>!
@@ -178,13 +180,13 @@ drop n xs = n tail xs
   <i>R<sub><i>k</i></sub></i>: <code>λx<sub>1</sub>...x<sub>k</sub> x<sub>k+1</sub>. (x<sub>k+1</sub> x<sub>1</sub> ... x<sub><i>k</i></sub>)</code> ROTATE
   <br>
   <i>T</i><sub><i>k</i>,t</sub>: <code>λx<sub>1</sub>...x<sub>k</sub> x<sub>k+1</sub>. t</code> REPLACE-->
-
+  <br>
   <h3>Path Construction</h3>
   The first step is to find a difference between the two normal forms, if one exists.
   For <code>u = λx<sub>1</sub>...x<sub>m</sub>. (g a<sub>1</sub>...a<sub>p</sub>)</code>
   and <code>v = λy<sub>1</sub>...y<sub>n</sub>. (h b<sub>1</sub>...b<sub>q</sub>)</code>,
   we first <i>η</i>-expand the lesser until <code>m = n</code>,
-  then <i>α</i>-rename <code>y<sub>1</sub>...y<sub>n</sub> to x<sub>1</sub>...x<sub>n</sub></code>
+  then <i>α</i>-rename <code>y<sub>1</sub>...y<sub>n</sub></code> to <code>x<sub>1</sub>...x<sub>n</sub></code>
   so that their lambda-bound variables are the same.
   These transformations preserve the semantics of <code>u</code> and <code>v</code>,
   so a difference path on the transformed terms is a difference path on the originals too.
@@ -212,8 +214,8 @@ drop n xs = n tail xs
   <code>u = λx<sub>1</sub>...x<sub>n</sub>. (x<sub>g</sub> a<sub>1</sub>...a<sub>p</sub>)</code> and
   <code>v = λx<sub>1</sub>...x<sub>n</sub>. (x<sub>h</sub> b<sub>1</sub>...b<sub>q</sub>)</code>,
   we know <code>g ≠ h</code>.
-  If we apply (<code>λx<sub>1</sub>...x<sub>p</sub> t f. t</code>) as the arg for <code>x<sub>g</sub></code>,
-  (<code>λx<sub>1</sub>...x<sub>q</sub> t f. t</code>) as the arg for <code>x<sub>h</sub></code>,
+  If we apply <code>λx<sub>1</sub>...x<sub>p</sub> t f. t</code> as the arg for <code>x<sub>g</sub></code>,
+  <code>λx<sub>1</sub>...x<sub>q</sub> t f. t</code> as the arg for <code>x<sub>h</sub></code>,
   and any other term (<i>e.g.</i> <code>λx.x</code>) for the rest of <code>x<sub>1</sub>...x<sub>n</sub></code>,
   then applying these args to <code>u</code> yields <code>(λt f. t)</code> and to <code>v</code> yields <code>(λt f. f)</code>.
   <br>
@@ -225,28 +227,32 @@ drop n xs = n tail xs
   <code>v = λx<sub>1</sub>...x<sub>n</sub>. (x<sub>h</sub> b<sub>1</sub>...b<sub>q</sub>)</code>,
   we know <code>p ≠ q</code>.
   Without loss of generality, assume <code>p < q</code>.
-  By applying (<code>λy<sub>1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub></code>)
-  as the arg for <code>x<sub>h</sub></code> and (<code>λx.x</code>) for the rest, we get
+  By applying <code>λy<sub>1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub></code>
+  as the arg for <code>x<sub>h</sub></code> and <code>λx.x</code> for the rest, we get
   <br>
   <code>(λx<sub>1</sub>...x<sub>h</sub>...x<sub>n</sub>. (x<sub>h</sub> a<sub>1</sub>...a<sub>p</sub>)) (λx.x)...(λy<sub>1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub>)...(λx.x)</code>
   <br>
-  ⇒<sub><i>β</i></sub> <code>(λy<sub>1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub>) a<sub>1</sub>[x<sub>1</sub>↦λx.x,...]...a<sub>p</sub>[x<sub>1</sub>↦λx.x,...]</code>
-  <br>
-  ⇒<sub><i>β</i></sub> <code>λy<sub>p+1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub></code>
-  <br>
-  ⇒<sub><i>α</i></sub> <code>λz<sub>1</sub>...z<sub>q-p+1</sub>. z<sub>q-p+1</sub></code>
-  <br>
+  <div class="reduceseq">
+    ⇒<sub><i>β</i></sub> <code>(λy<sub>1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub>) a<sub>1</sub>[x<sub>1</sub>↦λx.x,...]...a<sub>p</sub>[x<sub>1</sub>↦λx.x,...]</code>
+    <br>
+    ⇒<sub><i>β</i></sub> <code>λy<sub>p+1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub></code>
+    <br>
+    ⇒<sub><i>α</i></sub> <code>λz<sub>1</sub>...z<sub>q-p+1</sub>. z<sub>q-p+1</sub></code>
+    <br>
+  </div>
   and
   <br>
   <code>(λx<sub>1</sub>...x<sub>h</sub>...x<sub>n</sub>. (x<sub>h</sub> b<sub>1</sub>...b<sub>q</sub>)) (λx.x)...(λy<sub>1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub>)...(λx.x)</code>
   <br>
-  ⇒<sub><i>β</i></sub> <code>(λy<sub>1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub>) b<sub>1</sub>[x<sub>1</sub>↦λx.x,...]...b<sub>q</sub>[x<sub>1</sub>↦λx.x,...]</code>
-  <br>
-  ⇒<sub><i>β</i></sub> <code>λy<sub>q+1</sub>. y<sub>q+1</sub></code>
-  <br>
-  ⇒<sub><i>α</i></sub> <code>λz<sub>1</sub>. z<sub>1</sub></code>
-  <br>
-  ⇒<sub><i>η</i></sub> <code>λz<sub>1</sub>...z<sub>q-p+1</sub>. (z<sub>1</sub> z<sub>2</sub>...z<sub>q-p+1</sub>)</code>
+  <div class="reduceseq">
+    ⇒<sub><i>β</i></sub> <code>(λy<sub>1</sub>...y<sub>q+1</sub>. y<sub>q+1</sub>) b<sub>1</sub>[x<sub>1</sub>↦λx.x,...]...b<sub>q</sub>[x<sub>1</sub>↦λx.x,...]</code>
+    <br>
+    ⇒<sub><i>β</i></sub> <code>λy<sub>q+1</sub>. y<sub>q+1</sub></code>
+    <br>
+    ⇒<sub><i>α</i></sub> <code>λz<sub>1</sub>. z<sub>1</sub></code>
+    <br>
+    ⇒<sub><i>η</i></sub> <code>λz<sub>1</sub>...z<sub>q-p+1</sub>. (z<sub>1</sub> z<sub>2</sub>...z<sub>q-p+1</sub>)</code>
+  </div>
   <br>
   Which is a head difference since <code>p < q</code>, so we can conclude by using the first case above!
   <br>
@@ -260,7 +266,7 @@ drop n xs = n tail xs
     (x<sub>h</sub> a<sub>1</sub>...a<sub>i-1</sub> c a<sub>i+1</sub>...a<sub>p</sub>)</code>,
   we have a path <i>P</i> to a difference between <code>b</code> and <code>c</code>.
   If <code>x<sub>h</sub></code> does not occur along <i>P</i> except here, then this is easy!
-  We can simply apply (<code>λy<sub>1</sub>...y<sub>p</sub>. y<sub>i</sub></code>) as the arg for to the head var <code>x<sub>h</sub></code>, and recursively apply this process with the rest of <i>P</i> and (<code>λx<sub>1</sub>...x<sub>h-1</sub>&nbsp;x<sub>h+1</sub>...x<sub>n</sub>. b</code>) and (<code>λx<sub>1</sub>...x<sub>h-1</sub>&nbsp;x<sub>h+1</sub>...x<sub>n</sub>. c</code>).
+  We can simply apply <code>λy<sub>1</sub>...y<sub>p</sub>. y<sub>i</sub></code> as the arg for to the head var <code>x<sub>h</sub></code>, and recursively apply this process with the rest of <i>P</i> and <code>λx<sub>1</sub>...x<sub>h-1</sub>&nbsp;x<sub>h+1</sub>...x<sub>n</sub>. b</code> and <code>λx<sub>1</sub>...x<sub>h-1</sub>&nbsp;x<sub>h+1</sub>...x<sub>n</sub>. c</code>.
   <br>
   Things are a little more complicated if <code>x<sub>h</sub></code> occurs at the head several times on a path.
   This is because right now, the difference is buried inside the <i>i</i>th arg of <code>x<sub>h</sub></code>,
@@ -277,9 +283,11 @@ drop n xs = n tail xs
   <br>
   <code>(x<sub>h</sub> a<sub>1</sub>...a<sub>M</sub>)</code>
   <br>
-  ⇒<sub><i>β</i></sub> <code>(λx<sub>1</sub>...x<sub>M+1</sub>. (x<sub>M+1</sub> x<sub>1</sub>...x<sub>M</sub>)) a<sub>1</sub>...a<sub>M</sub></code>
-  <br>
-  ⇒<sub><i>β</i></sub> <code>λx<sub>M+1</sub>. x<sub>M+1</sub> a<sub>1</sub>...a<sub>M</sub></code>
+  <div class="reduceseq">
+    ⇒<sub><i>β</i></sub> <code>(λx<sub>1</sub>...x<sub>M+1</sub>. (x<sub>M+1</sub> x<sub>1</sub>...x<sub>M</sub>)) a<sub>1</sub>...a<sub>M</sub></code>
+    <br>
+    ⇒<sub><i>β</i></sub> <code>λx<sub>M+1</sub>. x<sub>M+1</sub> a<sub>1</sub>...a<sub>M</sub></code>
+  </div>
   <br>
   which introduces a new, distinct head variable for each head occurrence of <code>x<sub>h</sub></code>.
   We can procede with the simpler case above, because this new head only occurs once along the path.

@@ -1,16 +1,36 @@
 body {
     width: 100%;
-    max-width: 1000px;
-    margin: 50px 0;
+    max-width: 56em;
+    /*margin: 50px 0;*/
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20pt;
     font-family: 'Source Sans Pro', sans-serif;
     font-size: 18px;
     font-weight: 300;
     background-color:#fffcfa;
 }
 
-h1 { font-weight: 300; font-size: 48px; margin: 0 0 10px 0; }
-h2 { font-weight: 300; font-size: 32px; margin: 0 0 6px 0; }
-h3 { font-weight: 300; font-size: 24px; margin: 0 0 6px 0; }
+input,
+textarea,
+code {
+    background-color: #EEE;
+    border-radius: 3px;
+    padding: 0px 2px 0px 2px;
+    font-family: courier, monospace;
+    font-size: 14px;
+    font-weight: lighter;
+}
+
+.reduceseq {
+    padding-left: 10px;
+}
+
+h1 { font-weight: 300; font-size: 48px; margin: 6pt 0pt 6pt 0pt; }
+h2 { font-weight: 300; font-size: 32px; margin: 4pt 0pt 4pt 0pt; }
+h3 { font-weight: 300; font-size: 24px; margin: 4pt 0pt 4pt 0pt; }
+
+hr { color: #DDD; border-width: 0.8px }
 
 a { text-decoration: none; color: #2980b9; }
 
@@ -22,8 +42,22 @@ div.contact { font-size: 16px; }
 div.name { }
 div.pub { margin: 12px 0; }
 
-div.contact dt { margin-top: 20px; color: #2980b9; }
-div.contact dd { margin-left: 0;}
+div.contact dt::before,
+div.contact dt::after {
+  content: '';
+  flex: 1;
+  border-bottom: 0.5px solid #AAA;
+}
+div.contact dt:not(:empty)::before { margin-right: .25em; }
+div.contact dt:not(:empty)::after { margin-left: .25em; }
+div.contact dt {
+    margin-top: 15px;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+div.contact dd { margin-left: 0px;}
 
 div.lastupdated { font-size: 12px; }
 
