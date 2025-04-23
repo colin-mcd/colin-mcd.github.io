@@ -146,6 +146,7 @@ drop n xs = n tail xs
   <br>
   Not only does a <code>Δ</code> exist, but there is a constructive algorithm
   called the Böhm-out technique that gives us a concrete <code>Δ</code>!
+  We will loosely follow [<a href="#citeguerrinietal">2</a>].
   
   <!-- <h3>Preliminaries</h3> -->
   <!-- A <i>λ</i>-term in normal form can be expressed by the tree-like structure -->
@@ -253,8 +254,7 @@ drop n xs = n tail xs
     <br>
     ⇒<sub><i>η</i></sub> <code>λz<sub>1</sub>...z<sub>q-p+1</sub>. (z<sub>1</sub> z<sub>2</sub>...z<sub>q-p+1</sub>)</code>
   </div>
-  <br>
-  Which is a head difference since <code>p < q</code>, so we can conclude by using the first case above!
+  which is a head difference since <code>p < q</code>, so we can conclude by using the first case above!
   <br>
   <br>
   <i>Case: difference in </i>i<i>th arg</i>.
@@ -288,7 +288,6 @@ drop n xs = n tail xs
     <br>
     ⇒<sub><i>β</i></sub> <code>λx<sub>M+1</sub>. x<sub>M+1</sub> a<sub>1</sub>...a<sub>M</sub></code>
   </div>
-  <br>
   which introduces a new, distinct head variable for each head occurrence of <code>x<sub>h</sub></code>.
   We can procede with the simpler case above, because this new head only occurs once along the path.
   <!-- If <i>P</i> terminates with a difference in number of args applied to <code>h</code> as the head, -->
@@ -378,7 +377,8 @@ drop n xs = n tail xs
 <div>
 References
 <br>
-<div id="citehuet">[1] <a href="https://inria.hal.science/inria-00074664/document">Huet, Gérard. An Analysis of Böhm’s Theorem. 2008.</a></div>
+<div id="citehuet">[1] <a href="https://inria.hal.science/inria-00074664/document">G. Huet. An <i>Analysis of Böhm’s Theorem</i>. 2008.</a></div>
+<div id="citeguerrinietal">[2] <a href="https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=87dc00862c0b71a8c507b97d06e216336793f5be">S. Guerrini, A. Piperno, M. Dezani-Ciancaglini. <i>Böhm&apos;s Theorem</i>. 2015.</a>
 </div>
 </body>
 </html>
