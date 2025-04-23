@@ -1,4 +1,4 @@
-Code for my [personal website](https://colinmcdonald.org)!
+Code for my [personal website](https://colin-mcd.com)!
 
 Email SVG created in Inkscape with the following procedure:
 1. Create text with email address
