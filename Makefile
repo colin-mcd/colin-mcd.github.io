@@ -1,7 +1,3 @@
-#SHELL := /bin/bash
-
-#include ~/.ghc-wasm/env
-
 GHC_FLAGS=-Wall -Wno-unused-matches -Wno-unused-local-binds -Wno-missing-signatures -Wno-name-shadowing -Wno-orphans -Wno-type-defaults
 GHC_OBJ_FLAGS=--make -odir .objects -hidir .objects
 GHC=ghc
