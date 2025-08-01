@@ -22,6 +22,12 @@ code {
     font-weight: lighter;
 }
 
+pre {
+    white-space: pre-wrap;
+    background-color: #EEE;
+    border-radius: 3px;
+}
+
 .reduceseq {
     padding-left: 10px;
 }
