@@ -16,4 +16,4 @@ all:
 
 .PHONY: clean
 clean:
-	rm -f .objects/* *.hi *.o *.wasm *_stub.hx
+	rm -rf .objects/* *.hi *.o *.wasm *_stub.hx
